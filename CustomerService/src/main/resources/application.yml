@@ -1,0 +1,50 @@
+spring:
+  application:
+    name: customer-service
+  #Crea una base de datos como archivo
+  datasource:
+    url: jdbc:h2:file:~/customerbanking;DB_CLOSE_ON_EXIT=FALSE;
+  #Genera la base de datos solo si no ha sido creada
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers:
+          - localhost:9092
+      bindings:
+        notification-in:
+          destination: notification
+          content-type: application/json
+        notification-out:
+          destination: notification
+          content-type: application/json
+        
+        
+server:
+  port: 6161
+
+eureka:
+  client:
+    service-url:
+      default-zone: ${EUREKA_URI:http://localhost:8761/eureka}
+  instance:
+    ip-address: true
+    
+logging:
+  file: costumer.log
+  level:
+    root:
+    project:
+        user:
+          UserClient: FULL
